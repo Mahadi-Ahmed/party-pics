@@ -1,14 +1,17 @@
 Build a website where users can upload pictures from the wedding
 
-# Requirements:
-
 TODO:
 [x] Get the domain mahadia.dev
 [x] Create a subdomain dipti.mahadia.dev
 [x] upload super simple hello world index.html
-[] add svelte
-[] add shadcn
-[] create stage deployment
+[x] add svelte
+[x] add shadcn
+[x] create stage deployment
+[x] add functionality to upload files to browser
+[] list uploaded pictures
+[] show uploaded pictures
+[] add favico
+[] add design
 
 # create-svelte
 

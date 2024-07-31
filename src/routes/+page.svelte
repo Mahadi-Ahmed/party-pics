@@ -1,17 +1,44 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 
-	let fileInput: HTMLInputElement;
+	let fileInputElement: HTMLInputElement;
+	let files: FileList | null;
+	let previewFiles: string[] = [];
 
-	const handleClick = () => {
-		console.log('btn clicked');
-		fileInput.click();
+	const handleUploadClick = () => {
+		console.log('upload clicked');
+		console.log(files);
+		// console.log('previewFiles')
+		// console.log(previewFiles)
+	};
+	const handleSelectClick = (event: MouseEvent) => {
+		console.log('btn select clicked');
+		event.preventDefault();
+		fileInputElement.click();
+	};
+
+	const handleFileInput = (event: Event) => {
+		console.log('handleFileInput ');
+		let target = event.target as HTMLInputElement;
+		files = target.files;
+		previewFiles = [];
+
+		if (files) {
+			console.log('files yooo');
+			for (const file of files) {
+				let reader = new FileReader();
+				reader.onload = (e) => {
+					previewFiles = [...previewFiles, e.target?.result as string];
+				};
+				reader.readAsDataURL(file);
+			}
+		}
 	};
 </script>
 
-<div class="flex flex-col items-center gap-2 m-2">
-	<h1>Welcome to SvelteKit</h1>
-	<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<div class="m-2 flex flex-col items-center gap-2">
+	<h1>Wedding party pics</h1>
+	<p>Ladda upp dina bilder från festen</p>
 	<div>
 		<form enctype="multipart/form-data">
 			<input
@@ -19,10 +46,17 @@
 				name="fileToUpload"
 				multiple
 				accept=".jpg, .jpeg, .png, .heif, .heic, .dng, .tiff"
-				bind:this={fileInput}
+				bind:this={fileInputElement}
 				class="hidden"
+				on:change={handleFileInput}
 			/>
-			<Button on:click={handleClick}>Click me</Button>
+			<Button on:click={handleSelectClick}>Select Photos</Button>
+			<Button on:click={handleUploadClick} variant="secondary">Upload</Button>
 		</form>
+	</div>
+	<div class="flex flex-wrap justify-center gap-2">
+		{#each previewFiles as preview}
+			<img src={preview} alt="preview" />
+		{/each}
 	</div>
 </div>

@@ -8,10 +8,14 @@ TODO:
 [x] add shadcn
 [x] create stage deployment
 [x] add functionality to upload files to browser
-[] list uploaded pictures
-[] show uploaded pictures
-[] add favico
+[x] list uploaded pictures
+[x] show uploaded pictures
+[x] add favico
 [] add design
+[] add toast when upload is successfull/failed
+
+
+https://sveltebyexample.com/
 
 # create-svelte
 

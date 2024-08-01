@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-  import Preview from '$lib/components/Preview.svelte'
+	import Preview from '$lib/components/Preview.svelte';
 
 	let fileInputElement: HTMLInputElement;
 	let files: FileList | null;
@@ -25,7 +25,6 @@
 		previewFiles = [];
 
 		if (files) {
-			console.log('files yooo');
 			for (const file of files) {
 				let reader = new FileReader();
 				reader.onload = (e) => {
@@ -44,7 +43,7 @@
 		fram emot efter ikväll!
 	</p>
 	<p class="text-sm italic">PS. Det är bara brudparet som kan se bilderna</p>
-	<div>
+	<div class="">
 		<form enctype="multipart/form-data">
 			<input
 				type="file"
@@ -59,5 +58,7 @@
 			<Button on:click={handleUploadClick} variant="secondary">Upload</Button>
 		</form>
 	</div>
-  <Preview {previewFiles}/>
+	{#if previewFiles.length > 0}
+		<Preview {previewFiles} />
+	{/if}
 </div>

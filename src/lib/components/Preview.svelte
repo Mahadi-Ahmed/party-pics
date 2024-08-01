@@ -8,7 +8,6 @@
     opts={{
       align: "center"
     }}
-    orientation="vertical"
     class="w-full max-w-xs mx-auto" 
   >
 		<Carousel.Content>
@@ -20,7 +19,5 @@
 				</Carousel.Item>
 			{/each}
 		</Carousel.Content>
-		<Carousel.Previous />
-		<Carousel.Next />
 	</Carousel.Root>
 </div>

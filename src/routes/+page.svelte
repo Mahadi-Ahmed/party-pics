@@ -36,14 +36,14 @@
 	};
 </script>
 
-<div class="m-2 flex flex-col items-center gap-2">
+<div class="m-2 flex flex-col items-center gap-6">
 	<h1 class="text-2xl font-bold">Välkomna till vårt gemensamma fotoalbum</h1>
 	<p class="text-center">
 		Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
 		fram emot efter ikväll!
 	</p>
 	<p class="text-sm italic">PS. Det är bara brudparet som kan se bilderna</p>
-	<div class="">
+	<div class="flex justify-center gap-2">
 		<form enctype="multipart/form-data">
 			<input
 				type="file"
@@ -58,7 +58,8 @@
 			<Button on:click={handleUploadClick} variant="secondary">Upload</Button>
 		</form>
 	</div>
-	{#if previewFiles.length > 0}
-		<Preview {previewFiles} />
-	{/if}
+	<Preview {previewFiles} />
+	<!-- {#if previewFiles.length > 0} -->
+	<!-- 	<Preview {previewFiles} /> -->
+	<!-- {/if} -->
 </div>

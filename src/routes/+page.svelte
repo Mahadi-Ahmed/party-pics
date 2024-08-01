@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
+  import Preview from '$lib/components/Preview.svelte'
 
 	let fileInputElement: HTMLInputElement;
 	let files: FileList | null;
@@ -54,10 +55,5 @@
 			<Button on:click={handleUploadClick} variant="secondary">Upload</Button>
 		</form>
 	</div>
-	<div class="flex flex-wrap justify-center gap-2">
-		{#each previewFiles as preview}
-			<img src={preview} alt="preview" />
-      <p>hej</p>
-		{/each}
-	</div>
+  <Preview {previewFiles}/>
 </div>

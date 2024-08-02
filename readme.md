@@ -10,10 +10,11 @@ TODO:
 - [x] add tailwind/shadcn
 - [x] add functionality to upload files to browser
 - [x] list uploaded pictures
-- [] show one preview
+- [x] show one preview
 - [] add carousel component
 - [] create a component to show/preview uploaded pictures
 - [] add favico
+- [] add site title
 - [] add design
 - [] add toast when upload is successfull/failed
 - [] create stage deployment

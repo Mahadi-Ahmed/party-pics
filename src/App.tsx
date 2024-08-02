@@ -1,8 +1,9 @@
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
+  const [previewFiles, setPreviewFiles] = useState<string[]>([])
   const [debug, setDebug] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -11,6 +12,12 @@ function App() {
     console.log('click select photo')
     fileInputRef.current?.click()
   }
+
+  useEffect(() => {
+    return () => {
+      return previewFiles.forEach(URL.revokeObjectURL)
+    }
+  }, [previewFiles])
 
   // NOTE: Async or not async?
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,7 +31,10 @@ function App() {
     console.log('handleFileInput ')
     const files = event.target.files
     if (files) {
-      setRawUserFiles(Array.from(files))
+      const fileArray = Array.from(files)
+      setRawUserFiles(fileArray)
+      const previewUrls = fileArray.map((file) => URL.createObjectURL(file))
+      setPreviewFiles(previewUrls)
     }
   }
 
@@ -53,7 +63,7 @@ function App() {
             </div>
           </form>
         </div>
-        {/* <img src={preview} alt='preview' class='aspect-square h-full w-full object-cover' /> */}
+        <img src={previewFiles[0]} alt='preview' className='aspect-square h-full w-full object-cover' />
       </div>
       {debug && (
         <div className='m-2 flex flex-col items-center gap-6'>

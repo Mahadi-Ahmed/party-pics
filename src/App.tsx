@@ -1,5 +1,6 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { Preview } from './components/Preview';
 
 export interface PreviewFile {
   url: string;
@@ -72,7 +73,7 @@ function App() {
             </div>
           </form>
         </div>
-        <img src={previewFiles[0]} alt='preview' className='aspect-square h-full w-full object-cover' />
+        <Preview previewFiles={previewFiles} />
       </div>
       {debug && (
         <div className='m-2 flex flex-col items-center gap-6'>

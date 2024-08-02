@@ -11,7 +11,7 @@ TODO:
 - [x] add functionality to upload files to browser
 - [x] list uploaded pictures
 - [x] show one preview
-- [] create a component to show/preview uploaded pictures
+- [x] create a component to show/preview uploaded pictures
 - [] add carousel component
 - [x] add favico
 - [x] add site title

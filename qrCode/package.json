@@ -1,11 +1,11 @@
 {
-  "name": "qrCode",
-  "version": "1.0.0",
-  "description": "create a qr code",
-  "main": "qrCode.js",
-  "author": "Mahadi Ahmed",
-  "license": "MIT",
-  "dependencies": {
-    "qrcode": "^1.5.3"
-  }
+	"name": "qrCode",
+	"version": "1.0.0",
+	"description": "create a qr code",
+	"main": "qrCode.js",
+	"author": "Mahadi Ahmed",
+	"license": "MIT",
+	"dependencies": {
+		"qrcode": "^1.5.3"
+	}
 }

@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import Preview from '$lib/components/Preview.svelte';
+	import { onDestroy } from 'svelte';
 
 	let fileInputElement: HTMLInputElement;
 	let files: FileList | null;
-	let previewFiles: string[] = [];
+
+	interface PreviewFile {
+		url: string;
+		type: string;
+	}
+
+	let previewFiles: PreviewFile[] = [];
 
 	const handleUploadClick = () => {
 		console.log('upload clicked');
@@ -27,14 +34,22 @@
 
 		if (files) {
 			for (const file of files) {
-				let reader = new FileReader();
-				reader.onload = (e) => {
-					previewFiles = [...previewFiles, e.target?.result as string];
-				};
-				reader.readAsDataURL(file);
+				const url = URL.createObjectURL(file);
+				previewFiles = [
+					...previewFiles,
+					{
+						url: url,
+						type: file.type
+					}
+				];
 			}
 		}
 	};
+
+  onDestroy(() => {
+    previewFiles.forEach(file => URL.revokeObjectURL(file.url))
+  })
+
 </script>
 
 <div class="m-2 flex flex-col items-center gap-6">

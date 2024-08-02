@@ -1,6 +1,7 @@
 Build a website where users can upload pictures from the wedding
 
 TODO:
+
 - [x] Get the domain mahadia.dev
 - [x] Create a subdomain dipti.mahadia.dev
 - [x] upload super simple hello world index.html
@@ -13,7 +14,7 @@ TODO:
 - [x] add favico
 - [] add design
 - [] add toast when upload is successfull/failed
-
+- [] make sure original format is preserved when uploading
 
 https://sveltebyexample.com/
 

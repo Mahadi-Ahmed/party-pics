@@ -11,10 +11,10 @@ TODO:
 - [x] add functionality to upload files to browser
 - [x] list uploaded pictures
 - [x] show one preview
-- [] add carousel component
 - [] create a component to show/preview uploaded pictures
-- [] add favico
-- [] add site title
+- [] add carousel component
+- [x] add favico
+- [x] add site title
 - [] add design
 - [] add toast when upload is successfull/failed
 - [] create stage deployment

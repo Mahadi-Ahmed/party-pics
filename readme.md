@@ -6,6 +6,17 @@ TODO:
 - [x] Get the domain mahadia.dev
 - [x] Create a subdomain dipti.mahadia.dev
 - [x] upload super simple hello world index.html
+- [x] add react
+- [x] add tailwind/shadcn
+- [x] add functionality to upload files to browser
+- [] list uploaded pictures
+- [] add carousel component
+- [] show/preview uploaded pictures
+- [] add favico
+- [] add design
+- [] add toast when upload is successfull/failed
+- [] create stage deployment
+
 
 ## React + TypeScript + Vite
 

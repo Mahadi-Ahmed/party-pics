@@ -1,9 +1,14 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
+export interface PreviewFile {
+  url: string;
+  type: string;
+}
+
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
-  const [previewFiles, setPreviewFiles] = useState<string[]>([])
+  const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [debug, setDebug] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -15,15 +20,16 @@ function App() {
 
   useEffect(() => {
     return () => {
-      return previewFiles.forEach(URL.revokeObjectURL)
+      return previewFiles.forEach(file => URL.revokeObjectURL(file.url))
     }
   }, [previewFiles])
 
-  // NOTE: Async or not async?
-  const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleUpload = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('click upload')
-    console.log(rawUserFiles)
+    // console.log(rawUserFiles)
+    console.log('previewFiles')
+    console.log(previewFiles)
     setDebug(true)
   }
 
@@ -33,7 +39,10 @@ function App() {
     if (files) {
       const fileArray = Array.from(files)
       setRawUserFiles(fileArray)
-      const previewUrls = fileArray.map((file) => URL.createObjectURL(file))
+      const previewUrls = fileArray.map((file) => ({
+        url: URL.createObjectURL(file),
+        type: file.type
+      }))
       setPreviewFiles(previewUrls)
     }
   }

@@ -9,6 +9,7 @@
 	const handleUploadClick = () => {
 		console.log('upload clicked');
 		console.log(files);
+		console.log(previewFiles);
 		// console.log('previewFiles')
 		// console.log(previewFiles)
 	};

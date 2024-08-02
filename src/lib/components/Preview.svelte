@@ -1,23 +1,14 @@
 <script lang="ts">
-	import * as Carousel from '$lib/components/ui/carousel/index.js';
+	import * as Card from '$lib/components/ui/card';
 	export let previewFiles: string[] = [];
 </script>
 
-<div class="relative w-full pb-12 pt-12">
-	<Carousel.Root 
-    opts={{
-      align: "center"
-    }}
-    class="w-full max-w-xs mx-auto" 
-  >
-		<Carousel.Content>
-			{#each previewFiles as preview}
-				<Carousel.Item class="basis-full">
-          <div class="">
-					<img src={preview} alt="preview" class="w-full h-full object-cover rounded-md" />
-          </div>
-				</Carousel.Item>
-			{/each}
-		</Carousel.Content>
-	</Carousel.Root>
+<div class="grid grid-cols-3 gap-2">
+	{#each previewFiles as file}
+		<Card.Root class="overflow-hidden">
+			<Card.Content class="p-0">
+				<img src={file} alt="preview" class="aspect-square h-full w-full object-cover" />
+			</Card.Content>
+		</Card.Root>
+	{/each}
 </div>

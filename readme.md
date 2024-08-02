@@ -9,13 +9,15 @@ TODO:
 - [x] add react
 - [x] add tailwind/shadcn
 - [x] add functionality to upload files to browser
-- [] list uploaded pictures
+- [x] list uploaded pictures
+- [] show one preview
 - [] add carousel component
-- [] show/preview uploaded pictures
+- [] create a component to show/preview uploaded pictures
 - [] add favico
 - [] add design
 - [] add toast when upload is successfull/failed
 - [] create stage deployment
+- [] make sure original format is preserved when uploading
 
 
 ## React + TypeScript + Vite

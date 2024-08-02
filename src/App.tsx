@@ -1,7 +1,9 @@
-import { ChangeEvent, useRef } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 function App() {
+  const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
+  const [debug, setDebug] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -14,10 +16,16 @@ function App() {
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('click upload')
+    console.log(rawUserFiles)
+    setDebug(true)
   }
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files)
+    console.log('handleFileInput ')
+    const files = event.target.files
+    if (files) {
+      setRawUserFiles(Array.from(files))
+    }
   }
 
   return (
@@ -34,16 +42,27 @@ function App() {
             <input
               type='file'
               multiple
-              accept='.jpg, .jpeg, .png, .heif, .heic, .dng, .tiff'
+              accept='.jpg, .jpeg, .png, .heif, .heic, .dng, .tiff, video/*'
               className='hidden'
               ref={fileInputRef}
               onChange={handleFileInput}
             />
-            <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-            <Button type='submit' variant='secondary'>Upload</Button>
+            <div className='flex gap-2'>
+              <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
+              <Button type='submit' variant='secondary'>Upload</Button>
+            </div>
           </form>
         </div>
+        {/* <img src={preview} alt='preview' class='aspect-square h-full w-full object-cover' /> */}
       </div>
+      {debug && (
+        <div className='m-2 flex flex-col items-center gap-6'>
+          <h4>Debug stuff</h4>
+          {rawUserFiles.map((file, index) => (
+            <p key={index}>{file.name}: {file.type}</p>
+          ))}
+        </div>
+      )}
     </>
   )
 }

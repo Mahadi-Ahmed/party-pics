@@ -1,26 +1,19 @@
-import useEmblaCarousel from 'embla-carousel-react'
 import type { PreviewFile } from '@/App'
+import EmblaCarousel from './embla/EmblaCarousel'
+import { EmblaOptionsType } from 'embla-carousel'
 
 interface Props {
   previewFiles: PreviewFile[]
 }
+
 export const Preview = ({ previewFiles }: Props) => {
-  const [emblaRef] = useEmblaCarousel()
+  const OPTIONS: EmblaOptionsType = {}
 
   return (
-    <div className='overflow-hidden' ref={emblaRef}>
-      <div className='flex'>
-        {previewFiles.map((file, index) => (
-          <div className='flex-none w-full min-w-0'>
-            <img
-              key={index}
-              src={file.url}
-              alt={`preview ${index}`}
-              className='aspect-square h-full w-full object-cover' />
-          </div>
-        ))
-        }
-      </div>
-    </div>
+    <>
+      {previewFiles.length > 0 && (
+        <EmblaCarousel slides={previewFiles} options={OPTIONS} />
+      )}
+    </>
   )
 }

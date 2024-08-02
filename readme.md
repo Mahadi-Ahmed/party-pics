@@ -12,7 +12,7 @@ TODO:
 - [x] list uploaded pictures
 - [x] show one preview
 - [x] create a component to show/preview uploaded pictures
-- [] add carousel component
+- [x] add carousel component
 - [x] add favico
 - [x] add site title
 - [] add design

@@ -14,5 +14,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'quotes': ['error', 'single'], // This line enforces single quotes
+    'jsx-quotes': ['error', 'prefer-single'], // This line enforces single quotes in JSX
   },
 }

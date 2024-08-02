@@ -63,4 +63,12 @@
 	<!-- {#if previewFiles.length > 0} -->
 	<!-- 	<Preview {previewFiles} /> -->
 	<!-- {/if} -->
+	{#if files}
+		{#each files as file}
+			<div>
+				<p>{file.name}</p>
+				<p>{file.type}</p>
+			</div>
+		{/each}
+	{/if}
 </div>

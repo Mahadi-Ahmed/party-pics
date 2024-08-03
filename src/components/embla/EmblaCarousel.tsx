@@ -3,6 +3,7 @@ import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 import { Thumb } from './EmblaCarouselThumbsButton'
 import type { PreviewFile } from '@/App'
+import Fade from 'embla-carousel-fade'
 
 type PropType = {
   slides: PreviewFile[]
@@ -17,7 +18,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     loop: false,
     align: 'start',
     containScroll: 'trimSnaps'
-  })
+  },[Fade()])
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: 'keepSnaps',
     dragFree: true,

@@ -15,9 +15,9 @@ TODO:
 - [x] add carousel component
 - [x] add favico
 - [x] add site title
+- [x] create stage deployment
 - [] add design
 - [] add toast when upload is successfull/failed
-- [] create stage deployment
 - [] make sure original format is preserved when uploading
 
 

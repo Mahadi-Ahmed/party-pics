@@ -16,6 +16,7 @@ TODO:
 - [x] add favico
 - [x] add site title
 - [x] create stage deployment
+- [x] add counter
 - [] add design
 - [] add toast when upload is successfull/failed
 - [] make sure original format is preserved when uploading

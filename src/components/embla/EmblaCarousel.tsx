@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
+import { SelectedSnapDisplay, useSelectedSnapDisplay } from './EmblaCarouselSelectedSnapDisplay'
 import { Thumb } from './EmblaCarouselThumbsButton'
 import type { PreviewFile } from '@/App'
 import Fade from 'embla-carousel-fade'
@@ -24,6 +25,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     dragFree: true,
     align: 'start'
   })
+  const { selectedSnap, snapCount } = useSelectedSnapDisplay(emblaMainApi)
 
   const onThumbClick = useCallback(
     (index: number) => {
@@ -80,6 +82,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           </div>
         </div>
       </div>
+      <SelectedSnapDisplay selectedSnap={selectedSnap} snapCount={snapCount} />
     </div>
   )
 }

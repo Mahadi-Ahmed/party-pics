@@ -18,7 +18,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     loop: false,
     align: 'start',
     containScroll: 'trimSnaps'
-  },[Fade()])
+  }, [Fade()])
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: 'keepSnaps',
     dragFree: true,
@@ -66,9 +66,9 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           </div>
         </div>
       </div>
-      <div className='p-2'>
+      <div className='px-2 pb-2'>
         <div className='overflow-hidden' ref={emblaThumbsRef}>
-          <div className='flex -ml-2'>
+          <div className='flex -ml-2 '>
             {slides.map((slide, index) => (
               <Thumb
                 key={index}

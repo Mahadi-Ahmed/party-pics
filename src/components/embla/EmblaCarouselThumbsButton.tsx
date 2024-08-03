@@ -12,8 +12,7 @@ export const Thumb: React.FC<PropType> = (props) => {
     <button
       onClick={onClick}
       type='button'
-      className={`flex-[0_0_calc(33.333%-0.5rem)] min-w-0 relative pb-[20%] ml-2 rounded-md overflow-hidden ${selected ? 'ring-2 ring-primary' : 'ring-1 ring-border'
-        }`}
+      className={'flex-[0_0_calc(33.333%-0.5rem)] min-w-0 relative pb-[20%] ml-2 rounded-md overflow-hidden'}
     >
       <div className='absolute inset-0'>
         {slide.type.startsWith('image') ? (
@@ -26,6 +25,9 @@ export const Thumb: React.FC<PropType> = (props) => {
           <div className='flex items-center justify-center w-full h-full bg-muted text-muted-foreground text-sm'>
             Unsupported
           </div>
+        )}
+        {!selected && (
+          <div className='absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-200 ease-in-out'></div>
         )}
       </div>
     </button>

@@ -1,4 +1,3 @@
-import React from 'react'
 import type { PreviewFile } from '@/App'
 
 type PropType = {

@@ -14,9 +14,22 @@ function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSelectPhoto = () => {
+  const handleSelectPhoto = async () => {
     console.log('click select photo')
     fileInputRef.current?.click()
+    await getHelloWorld()
+  }
+
+  const getHelloWorld = async () => {
+    const response = await fetch('https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/hello-world')
+    // const response = await fetch('http://localhost:8080')
+    try {
+      console.log('response from api:')
+      console.log(response)
+      return response
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {

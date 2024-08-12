@@ -1,0 +1,40 @@
+{
+  "hash": "733c89c6",
+  "configHash": "5f8da489",
+  "lockfileHash": "5d1ed91d",
+  "browserHash": "185d1302",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "b0e55829",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "848f8efc",
+      "needsInterop": true
+    },
+    "embla-carousel-react": {
+      "src": "../../node_modules/embla-carousel-react/esm/embla-carousel-react.esm.js",
+      "file": "embla-carousel-react.js",
+      "fileHash": "26e7caa0",
+      "needsInterop": false
+    },
+    "embla-carousel-fade": {
+      "src": "../../node_modules/embla-carousel-fade/esm/embla-carousel-fade.esm.js",
+      "file": "embla-carousel-fade.js",
+      "fileHash": "d385346d",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-WNPTCGAH": {
+      "file": "chunk-WNPTCGAH.js"
+    },
+    "chunk-5WRI5ZAA": {
+      "file": "chunk-5WRI5ZAA.js"
+    }
+  }
+}

@@ -11,26 +11,9 @@ function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [debug, setDebug] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleSelectPhoto = async () => {
-    console.log('click select photo')
-    fileInputRef.current?.click()
-    await getHelloWorld()
-  }
-
-  const getHelloWorld = async () => {
-    const response = await fetch('https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/hello-world')
-    // const response = await fetch('http://localhost:8080')
-    try {
-      console.log('response from api:')
-      console.log(response)
-      return response
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   useEffect(() => {
     return () => {
@@ -38,13 +21,47 @@ function App() {
     }
   }, [previewFiles])
 
-  const handleUpload = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSelectPhoto = async () => {
+    console.log('click select photo')
+    fileInputRef.current?.click()
+  }
+
+  const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('click upload')
-    // console.log(rawUserFiles)
-    console.log('previewFiles')
-    console.log(previewFiles)
-    setDebug(true)
+    setUploading(true)
+
+    /*
+     * NOTE: Create a 2 stage rocket
+     * 1. Gest signed urls for each picture
+     * 2. Upload each picture using the signed url
+     * */
+    const url = 'https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/generate-signed-urls'
+    const filesInfo = rawUserFiles.map(file => ({ name: file.name, type: file.type }))
+    console.log(filesInfo)
+    try {
+      const signedUrlsResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(filesInfo)
+      })
+
+      if (!signedUrlsResponse.ok) {
+        console.log(`Kalabalik with getSignedUrls for : ${signedUrlsResponse.status}`)
+        throw new Error(`Kalabalik with getSignedUrls  for : ${signedUrlsResponse.status}`)
+      }
+
+      const signedUrls = await signedUrlsResponse.json()
+      console.log(signedUrls)
+    } catch (error) {
+      console.log('kalabalik uploading')
+      console.log(error)
+    } finally {
+      setDebug(true)
+      setUploading(false)
+    }
   }
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +99,7 @@ function App() {
             />
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-              <Button type='submit' variant='secondary'>Upload</Button>
+              <Button type='submit' variant='secondary' disabled={uploading || rawUserFiles.length === 0}>{uploading ? 'Uploading...' : 'Upload'}</Button>
             </div>
           </form>
         </div>

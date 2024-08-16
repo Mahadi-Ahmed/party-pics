@@ -1,6 +1,7 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
+import { ReloadIcon } from '@radix-ui/react-icons'
 
 export interface PreviewFile {
   url: string;
@@ -13,6 +14,7 @@ function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
+  const [successfulUpload, setSuccessfullUpload] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -37,6 +39,7 @@ function App() {
 
     console.log('Mocked upload completed')
     setUploading(false)
+    setSuccessfullUpload(true)
   }
 
 
@@ -134,7 +137,9 @@ function App() {
               />
               <div className='flex gap-2'>
                 <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-                <Button type='submit' variant='secondary' disabled={uploading || rawUserFiles.length === 0}>{uploading ? 'Uploading...' : 'Upload'}</Button>
+                <Button type='submit' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
+                  {uploading ? <ReloadIcon className='mr-2 h-4 w-4 animate-spin' /> : 'Upload'}
+                </Button>
               </div>
             </form>
           </div>

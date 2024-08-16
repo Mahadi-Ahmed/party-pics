@@ -19,10 +19,10 @@ TODO:
 - [x] add counter
 - [x] actually upload files with signed urls
 - [x] add design
-  - [-] maybe use a picture with opacity as background
+  - [x] maybe use a picture with opacity as background
   - [] check what free fonts we can use
 - [] add toast when upload is successfull/failed
-- [] find a limit of pictures this soloution can handle
+- [x] find a limit of pictures this soloution can handle
 - [x] make sure original format is preserved when uploading
 
 

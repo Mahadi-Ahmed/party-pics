@@ -54,22 +54,25 @@ function App() {
       }
 
       const signedUrls = await signedUrlsResponse.json()
-      for (let i = 0; i < rawUserFiles.length; i++) {
-        const file = rawUserFiles[i]
-        const url = signedUrls[file.name]
-        console.log(`ill upload the file ${file.name} to this url: ${url}`)
+      const uploadAll = rawUserFiles.map(async (file) => {
+        const signedUrl = signedUrls[file.name]
+        if (!signedUrl) {
+          throw new Error(`No signed url for file ${file.name}`)
+        }
 
-        const upload = await fetch(url, {
+        const upload = await fetch(signedUrl, {
           method: 'PUT',
           body: file
         })
 
-        if(!upload.ok) {
+        if (!upload.ok) {
           throw new Error(`Error uploading the file ${file.name}`)
         }
-        console.log('upload success!')
-        console.log(upload)
-      }
+      })
+
+      const uploadResult = await Promise.allSettled(uploadAll)
+      console.log('All files uploaded successfully')
+      console.log(uploadResult)
     } catch (error) {
       console.log('kalabalik uploading')
       console.log(error)

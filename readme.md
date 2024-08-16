@@ -18,8 +18,8 @@ TODO:
 - [x] create stage deployment
 - [x] add counter
 - [x] actually upload files with signed urls
-- [] add design
-  - [] maybe use a picture with opacity as background
+- [x] add design
+  - [-] maybe use a picture with opacity as background
   - [] check what free fonts we can use
 - [] add toast when upload is successfull/failed
 - [] find a limit of pictures this soloution can handle

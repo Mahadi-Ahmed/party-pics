@@ -48,7 +48,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   }, [emblaMainApi, onSelect])
 
   return (
-    <div className='w-full max-w-3xl mx-auto bg-card text-card-foreground rounded-lg shadow-md overflow-hidden'>
+    <div className='w-full max-w-3xl mx-auto rounded-lg overflow-hidden'>
       <div className='p-2'>
         <div className='overflow-hidden' ref={emblaMainRef}>
           <div className='flex'>

@@ -27,7 +27,7 @@ export const Thumb: React.FC<PropType> = (props) => {
           </div>
         )}
         {!selected && (
-          <div className='absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-200 ease-in-out'></div>
+          <div className='absolute inset-0 bg-black bg-opacity-70 transition-opacity duration-200 ease-in-out'></div>
         )}
       </div>
     </button>

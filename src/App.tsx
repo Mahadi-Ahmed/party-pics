@@ -36,11 +36,12 @@ function App() {
      * 1. Gest signed urls for each picture
      * 2. Upload each picture using the signed url
      * */
-    const url = 'https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/generate-signed-urls'
+    const gcpUrl = 'https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/generate-signed-urls'
+    // const gcpUrl = 'http://localhost:8080'
     const filesInfo = rawUserFiles.map(file => ({ name: file.name, type: file.type }))
     console.log(filesInfo)
     try {
-      const signedUrlsResponse = await fetch(url, {
+      const signedUrlsResponse = await fetch(gcpUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -49,12 +50,26 @@ function App() {
       })
 
       if (!signedUrlsResponse.ok) {
-        console.log(`Kalabalik with getSignedUrls for : ${signedUrlsResponse.status}`)
-        throw new Error(`Kalabalik with getSignedUrls  for : ${signedUrlsResponse.status}`)
+        throw new Error(`Error with getSignedUrls  for : ${signedUrlsResponse.status}`)
       }
 
       const signedUrls = await signedUrlsResponse.json()
-      console.log(signedUrls)
+      for (let i = 0; i < rawUserFiles.length; i++) {
+        const file = rawUserFiles[i]
+        const url = signedUrls[file.name]
+        console.log(`ill upload the file ${file.name} to this url: ${url}`)
+
+        const upload = await fetch(url, {
+          method: 'PUT',
+          body: file
+        })
+
+        if(!upload.ok) {
+          throw new Error(`Error uploading the file ${file.name}`)
+        }
+        console.log('upload success!')
+        console.log(upload)
+      }
     } catch (error) {
       console.log('kalabalik uploading')
       console.log(error)

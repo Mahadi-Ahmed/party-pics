@@ -7,11 +7,12 @@ export interface PreviewFile {
   type: string;
 }
 
+const dev = true
+
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -24,6 +25,20 @@ function App() {
     console.log('click select photo')
     fileInputRef.current?.click()
   }
+
+
+  const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    console.log('Mocked upload started')
+    setUploading(true)
+
+    // Simulate API request with a 3-second delay
+    await new Promise(resolve => setTimeout(resolve, 3000))
+
+    console.log('Mocked upload completed')
+    setUploading(false)
+  }
+
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -94,6 +109,8 @@ function App() {
     }
   }
 
+  const uploadFunction = dev ? mockHandleUpload : handleUpload;
+
   return (
     <div className="min-h-screen bg-[url('/bg-pic.jpg')] bg-cover bg-center bg-no-repeat">
       {/* NOTE:  check if we want opacity*/}
@@ -106,7 +123,7 @@ function App() {
           </p>
           <p className='text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
           <div className='flex justify-center gap-2'>
-            <form encType='multipart/form-data' onSubmit={handleUpload}>
+            <form encType='multipart/form-data' onSubmit={uploadFunction}>
               <input
                 type='file'
                 multiple

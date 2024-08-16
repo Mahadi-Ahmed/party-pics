@@ -10,7 +10,6 @@ export interface PreviewFile {
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
-  const [debug, setDebug] = useState(false)
   const [uploading, setUploading] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +76,6 @@ function App() {
       console.log('kalabalik uploading')
       console.log(error)
     } finally {
-      setDebug(true)
       setUploading(false)
     }
   }
@@ -123,14 +121,6 @@ function App() {
         </div>
         <Preview previewFiles={previewFiles} />
       </div>
-      {debug && (
-        <div className='m-2 flex flex-col items-center gap-6'>
-          <h4>Debug stuff</h4>
-          {rawUserFiles.map((file, index) => (
-            <p key={index}>{file.name}: {file.type}</p>
-          ))}
-        </div>
-      )}
     </>
   )
 }

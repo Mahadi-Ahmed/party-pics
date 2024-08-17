@@ -137,8 +137,10 @@ function App() {
               />
               <div className='flex gap-2'>
                 <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-                <Button type='submit' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-                  {uploading ? <ReloadIcon className='mr-2 h-4 w-4 animate-spin' /> : 'Upload'}
+                <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
+                  <span className=''>
+                    {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
+                  </span>
                 </Button>
               </div>
             </form>

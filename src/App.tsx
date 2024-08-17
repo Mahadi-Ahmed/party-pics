@@ -1,18 +1,20 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
+import { ReloadIcon } from '@radix-ui/react-icons'
 
 export interface PreviewFile {
   url: string;
   type: string;
 }
 
+const dev = true
+
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
-  const [debug, setDebug] = useState(false)
   const [uploading, setUploading] = useState(false)
-
+  const [successfulUpload, setSuccessfullUpload] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -25,6 +27,21 @@ function App() {
     console.log('click select photo')
     fileInputRef.current?.click()
   }
+
+
+  const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    console.log('Mocked upload started')
+    setUploading(true)
+
+    // Simulate API request with a 3-second delay
+    await new Promise(resolve => setTimeout(resolve, 3000))
+
+    console.log('Mocked upload completed')
+    setUploading(false)
+    setSuccessfullUpload(true)
+  }
+
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -77,7 +94,6 @@ function App() {
       console.log('kalabalik uploading')
       console.log(error)
     } finally {
-      setDebug(true)
       setUploading(false)
     }
   }
@@ -96,42 +112,43 @@ function App() {
     }
   }
 
+  const uploadFunction = dev ? mockHandleUpload : handleUpload;
+
   return (
-    <>
-      <div className='m-2 flex flex-col items-center gap-6'>
-        <h1 className='text-2xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
-        <p className='text-center'>
-          Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
-          fram emot efter ikväll!
-        </p>
-        <p className='text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
-        <div className='flex justify-center gap-2'>
-          <form encType='multipart/form-data' onSubmit={handleUpload}>
-            <input
-              type='file'
-              multiple
-              accept='.jpg, .jpeg, .png, .heif, .heic, .dng, .tiff, video/*'
-              className='hidden'
-              ref={fileInputRef}
-              onChange={handleFileInput}
-            />
-            <div className='flex gap-2'>
-              <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-              <Button type='submit' variant='secondary' disabled={uploading || rawUserFiles.length === 0}>{uploading ? 'Uploading...' : 'Upload'}</Button>
-            </div>
-          </form>
+    <div className="min-h-screen bg-[url('/bg-pic.jpg')] bg-cover bg-center bg-no-repeat">
+      {/* NOTE:  check if we want opacity*/}
+      <div className='min-h-screen bg-black bg-opacity-50 flex justify-center'>
+        <div className='p-6 flex flex-col items-center gap-6 text-center'>
+          <h1 className='text-2xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
+          <p className='text-center'>
+            Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
+            fram emot efter ikväll!
+          </p>
+          <p className='text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
+          <div className='flex justify-center gap-2'>
+            <form encType='multipart/form-data' onSubmit={uploadFunction}>
+              <input
+                type='file'
+                multiple
+                accept='.jpg, .jpeg, .png, .heif, .heic, .dng, .tiff, video/*'
+                className='hidden'
+                ref={fileInputRef}
+                onChange={handleFileInput}
+              />
+              <div className='flex gap-2'>
+                <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
+                <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
+                  <span className=''>
+                    {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
+                  </span>
+                </Button>
+              </div>
+            </form>
+          </div>
+          <Preview previewFiles={previewFiles} />
         </div>
-        <Preview previewFiles={previewFiles} />
       </div>
-      {debug && (
-        <div className='m-2 flex flex-col items-center gap-6'>
-          <h4>Debug stuff</h4>
-          {rawUserFiles.map((file, index) => (
-            <p key={index}>{file.name}: {file.type}</p>
-          ))}
-        </div>
-      )}
-    </>
+    </div>
   )
 }
 

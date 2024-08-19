@@ -141,7 +141,7 @@ function App() {
       <div className='p-6 flex flex-col items-center gap-6 text-center'>
         <h1 className='font-serif text-4xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
         <p className='text-center'>
-          Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
+          Ladda upp kvällens bilder från ditt bildbibliotek och dela allt med oss, så har vi något att se
           fram emot efter ikväll!
         </p>
         <p className='font-serif text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>

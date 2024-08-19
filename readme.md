@@ -1,4 +1,4 @@
-# Build a website where users can upload pictures from the wedding
+# A website where users can upload pictures from the wedding
 
 # Requirements:
 
@@ -26,6 +26,7 @@ TODO:
 - [x] make sure original format is preserved when uploading
 - [] look into why adding multiple pictures takes alot of time on the pic seleciton on mobile devices
 - [] look over color scheme
+- [] handle/add animation for when showing/hiding the preview component
 
 
 ## React + TypeScript + Vite

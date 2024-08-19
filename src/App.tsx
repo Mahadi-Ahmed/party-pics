@@ -131,12 +131,12 @@ function App() {
   return (
     <div className="min-h-screen bg-[url('/bg-pic.jpg')] bg-cover bg-center bg-no-repeat">
       <div className='p-6 flex flex-col items-center gap-6 text-center'>
-        <h1 className='text-2xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
+        <h1 className='font-serif text-4xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
         <p className='text-center'>
           Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
           fram emot efter ikväll!
         </p>
-        <p className='text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
+        <p className='font-serif text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
         <div className='flex justify-center gap-2'>
           <form encType='multipart/form-data' onSubmit={uploadFunction}>
             <input

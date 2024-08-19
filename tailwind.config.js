@@ -17,6 +17,15 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Source Sans Pro', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'serif'],
+      },
+      fontWeight: {
+        normal: 400,
+        semibold: 600,
+        bold: 700
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

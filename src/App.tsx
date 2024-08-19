@@ -9,7 +9,7 @@ export interface PreviewFile {
   type: string;
 }
 
-const dev = true
+const dev = false
 
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
@@ -55,6 +55,9 @@ function App() {
     event.preventDefault()
     console.log('click upload')
     setUploading(true)
+    toast.loading('Laddar up bilder...', {
+      id: 'uploadToast'
+    })
 
     /*
      * NOTE: Create a 2 stage rocket
@@ -103,6 +106,9 @@ function App() {
       console.log(error)
     } finally {
       setUploading(false)
+      toast.success('Klart! Tack för att du delade bilderna med oss', {
+        id: 'uploadToast'
+      })
     }
   }
 
@@ -143,8 +149,8 @@ function App() {
             />
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}> */}
-              <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}>
+              <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
+              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
                 <span className=''>
                   {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
                 </span>

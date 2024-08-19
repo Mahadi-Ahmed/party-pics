@@ -18,6 +18,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
+        // sans: ['Source Sans Pro', 'sans-serif'],
+        // serif: ['Cormorant Garamond', 'serif'],
         serif: ['Playfair Display', 'serif'],
         sans: ['Lato', 'sans-serif']
       },

@@ -1,6 +1,32 @@
 @font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/combo1/CormorantGaramond-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('/fonts/combo1/CormorantGaramond-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/combo1/SourceSans3-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------- */
+
+@font-face {
   font-family: 'Playfair Display';
-  src: url('/fonts/combo1/PlayfairDisplay-Bold.woff2') format('woff2');
+  src: url('/fonts/combo2/PlayfairDisplay-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -8,7 +34,7 @@
 
 @font-face {
   font-family: 'Playfair Display';
-  src: url('/fonts/combo1/PlayfairDisplay-Italic.woff2') format('woff2');
+  src: url('/fonts/combo2/PlayfairDisplay-Italic.woff2') format('woff2');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -16,7 +42,7 @@
 
 @font-face {
   font-family: 'Lato';
-  src: url('/fonts/combo1/Lato-Regular.woff2') format('woff2');
+  src: url('/fonts/combo2/Lato-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

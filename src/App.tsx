@@ -139,8 +139,8 @@ function App() {
   return (
     <div className="min-h-screen bg-[url('/bg-pic.jpg')] bg-cover bg-center bg-no-repeat">
       <div className='p-6 flex flex-col items-center gap-6 text-center'>
-        <h1 className='font-serif text-4xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
-        <p className='text-center'>
+        <h1 className='font-serif text-4xl font-bold pt-2'>Välkomna till vårt gemensamma fotoalbum</h1>
+        <p className='text-center pt-4'>
           Ladda upp kvällens bilder från ditt bildbibliotek och dela allt med oss, så har vi något att se
           fram emot efter ikväll!
         </p>

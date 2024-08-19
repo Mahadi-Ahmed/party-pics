@@ -20,10 +20,11 @@ TODO:
 - [x] actually upload files with signed urls
 - [x] add design
   - [x] maybe use a picture with opacity as background
-  - [] check what free fonts we can use
+  - [x] check what free fonts we can use
 - [x] add toast when upload is successfull/failed
 - [x] find a limit of pictures this soloution can handle
 - [x] make sure original format is preserved when uploading
+- [] look into why adding multiple pictures takes alot of time on the pic seleciton on mobile devices
 - [] look over color scheme
 
 

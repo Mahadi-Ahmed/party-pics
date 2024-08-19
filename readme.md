@@ -21,9 +21,10 @@ TODO:
 - [x] add design
   - [x] maybe use a picture with opacity as background
   - [] check what free fonts we can use
-- [] add toast when upload is successfull/failed
+- [x] add toast when upload is successfull/failed
 - [x] find a limit of pictures this soloution can handle
 - [x] make sure original format is preserved when uploading
+- [] look over color scheme
 
 
 ## React + TypeScript + Vite

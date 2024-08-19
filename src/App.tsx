@@ -2,6 +2,7 @@ import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
+import { toast } from 'sonner'
 
 export interface PreviewFile {
   url: string;
@@ -32,6 +33,10 @@ function App() {
   const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('Mocked upload started')
+    toast.loading('Laddar up bilder...', {
+      id: 'uploadToast'
+    })
+
     setUploading(true)
 
     // Simulate API request with a 3-second delay
@@ -40,6 +45,9 @@ function App() {
     console.log('Mocked upload completed')
     setUploading(false)
     setSuccessfullUpload(true)
+    toast.success('Klart! Tack för att du delade bilderna med oss', {
+      id: 'uploadToast'
+    })
   }
 
 
@@ -47,6 +55,9 @@ function App() {
     event.preventDefault()
     console.log('click upload')
     setUploading(true)
+    toast.loading('Laddar up bilder...', {
+      id: 'uploadToast'
+    })
 
     /*
      * NOTE: Create a 2 stage rocket
@@ -95,6 +106,9 @@ function App() {
       console.log(error)
     } finally {
       setUploading(false)
+      toast.success('Klart! Tack för att du delade bilderna med oss', {
+        id: 'uploadToast'
+      })
     }
   }
 
@@ -116,37 +130,35 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[url('/bg-pic.jpg')] bg-cover bg-center bg-no-repeat">
-      {/* NOTE:  check if we want opacity*/}
-      <div className='min-h-screen bg-black bg-opacity-50 flex justify-center'>
-        <div className='p-6 flex flex-col items-center gap-6 text-center'>
-          <h1 className='text-2xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
-          <p className='text-center'>
-            Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
-            fram emot efter ikväll!
-          </p>
-          <p className='text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
-          <div className='flex justify-center gap-2'>
-            <form encType='multipart/form-data' onSubmit={uploadFunction}>
-              <input
-                type='file'
-                multiple
-                accept='.jpg, .jpeg, .png, .heif, .heic, .dng, .tiff, video/*'
-                className='hidden'
-                ref={fileInputRef}
-                onChange={handleFileInput}
-              />
-              <div className='flex gap-2'>
-                <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
-                <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-                  <span className=''>
-                    {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
-                  </span>
-                </Button>
-              </div>
-            </form>
-          </div>
-          <Preview previewFiles={previewFiles} />
+      <div className='p-6 flex flex-col items-center gap-6 text-center'>
+        <h1 className='font-serif text-4xl font-bold'>Välkomna till vårt gemensamma fotoalbum</h1>
+        <p className='text-center'>
+          Ladda upp kvällens bilder från ditt bildbibliotek så delas allt med oss, då har vi något att se
+          fram emot efter ikväll!
+        </p>
+        <p className='font-serif text-sm italic'>PS. Det är bara brudparet som kan se bilderna</p>
+        <div className='flex justify-center gap-2'>
+          <form encType='multipart/form-data' onSubmit={uploadFunction}>
+            <input
+              type='file'
+              multiple
+              accept='.jpg, .jpeg, .png, .heif, .heic, .dng, .tiff, video/*'
+              className='hidden'
+              ref={fileInputRef}
+              onChange={handleFileInput}
+            />
+            <div className='flex gap-2'>
+              <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
+              <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
+              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
+                <span className=''>
+                  {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
+                </span>
+              </Button>
+            </div>
+          </form>
         </div>
+        <Preview previewFiles={previewFiles} />
       </div>
     </div>
   )

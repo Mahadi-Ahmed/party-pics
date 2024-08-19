@@ -25,6 +25,7 @@ TODO:
 - [x] find a limit of pictures this soloution can handle
 - [x] make sure original format is preserved when uploading
 - [] look into why adding multiple pictures takes alot of time on the pic seleciton on mobile devices
+  - [] Try removing preview to see if it speeds it up
 - [] look over color scheme
 
 

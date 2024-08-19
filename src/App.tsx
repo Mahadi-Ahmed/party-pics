@@ -20,50 +20,72 @@ function App() {
 
   useEffect(() => {
     return () => {
-      return previewFiles.forEach(file => URL.revokeObjectURL(file.url))
+      previewFiles.forEach(file => URL.revokeObjectURL(file.url))
     }
   }, [previewFiles])
 
-  const handleSelectPhoto = async () => {
+  const handleSelectPhoto = () => {
     console.log('click select photo')
     fileInputRef.current?.click()
   }
 
+  const processFile = useCallback((file: File): PreviewFile => {
+    return {
+      url: URL.createObjectURL(file),
+      type: file.type
+    }
+  }, [])
+
+  const handleFileInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    console.log('handleFileInput')
+    const files = event.target.files
+    if (files) {
+      const fileArray = Array.from(files)
+      setRawUserFiles(prevFiles => [...prevFiles, ...fileArray])
+      
+      // Process files in batches to improve performance
+      const batchSize = 5
+      const processBatch = (start: number) => {
+        const end = Math.min(start + batchSize, fileArray.length)
+        const batch = fileArray.slice(start, end)
+        
+        const newPreviewUrls = batch.map(processFile)
+        
+        setPreviewFiles(prev => [...prev, ...newPreviewUrls])
+        
+        if (end < fileArray.length) {
+          setTimeout(() => processBatch(end), 0)
+        }
+      }
+      
+      processBatch(0)
+      setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
+    }
+  }, [processFile])
+
   const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('Mocked upload started')
-    toast.loading('Laddar up bilder...', {
-      id: 'uploadToast'
+    performUpload(async () => {
+      // Simulate API request with a 3-second delay
+      await new Promise(resolve => setTimeout(resolve, 3000))
+      console.log('Mocked upload completed')
     })
-
-    setUploading(true)
-
-    // Simulate API request with a 3-second delay
-    await new Promise(resolve => setTimeout(resolve, 3000))
-
-    console.log('Mocked upload completed')
-    setUploading(false)
-    handleSuccessfulUpload()
   }
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('click upload')
-    setUploading(true)
-    toast.loading('Laddar up bilder...', {
-      id: 'uploadToast'
-    })
+    performUpload(async () => {
+      /*
+       * NOTE: Create a 2 stage rocket
+       * 1. Get signed urls for each picture
+       * 2. Upload each picture using the signed url
+       */
+      const gcpUrl = 'https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/generate-signed-urls'
+      // const gcpUrl = 'http://localhost:8080'
+      const filesInfo = rawUserFiles.map(file => ({ name: file.name, type: file.type }))
+      console.log(filesInfo)
 
-    /*
-     * NOTE: Create a 2 stage rocket
-     * 1. Gest signed urls for each picture
-     * 2. Upload each picture using the signed url
-     * */
-    const gcpUrl = 'https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/generate-signed-urls'
-    // const gcpUrl = 'http://localhost:8080'
-    const filesInfo = rawUserFiles.map(file => ({ name: file.name, type: file.type }))
-    console.log(filesInfo)
-    try {
       const signedUrlsResponse = await fetch(gcpUrl, {
         method: 'POST',
         headers: {
@@ -73,11 +95,11 @@ function App() {
       })
 
       if (!signedUrlsResponse.ok) {
-        throw new Error(`Error with getSignedUrls  for : ${signedUrlsResponse.status}`)
+        throw new Error(`Error with getSignedUrls for: ${signedUrlsResponse.status}`)
       }
 
       const signedUrls = await signedUrlsResponse.json()
-      const uploadAll = rawUserFiles.map(async (file) => {
+      await Promise.all(rawUserFiles.map(async (file) => {
         const signedUrl = signedUrls[file.name]
         if (!signedUrl) {
           throw new Error(`No signed url for file ${file.name}`)
@@ -91,11 +113,21 @@ function App() {
         if (!upload.ok) {
           throw new Error(`Error uploading the file ${file.name}`)
         }
-      })
+      }))
 
-      const uploadResult = await Promise.allSettled(uploadAll)
       console.log('All files uploaded successfully')
-      console.log(uploadResult)
+    })
+  }
+
+  const performUpload = async (uploadFunction: () => Promise<void>) => {
+    console.log('click upload')
+    setUploading(true)
+    toast.loading('Laddar up bilder...', {
+      id: 'uploadToast'
+    })
+
+    try {
+      await uploadFunction()
       handleSuccessfulUpload()
     } catch (error) {
       console.log('kalabalik uploading')
@@ -116,34 +148,6 @@ function App() {
       id: 'uploadToast'
     })
   }
-
-  const processFile = useCallback((file: File): Promise<PreviewFile> => {
-    return new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        resolve({
-          url: URL.createObjectURL(file),
-          type: file.type
-        })
-      }
-      reader.readAsDataURL(file)
-    })
-  }, [])
-
-  const handleFileInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    console.log('handleFileInput')
-    const files = event.target.files
-    if (files) {
-      const fileArray = Array.from(files)
-      setRawUserFiles(prevFiles => [...prevFiles, ...fileArray])
-
-      fileArray.forEach(async (file) => {
-        const previewFile = await processFile(file)
-        setPreviewFiles(prevPreviews => [...prevPreviews, previewFile])
-      })
-      setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
-    }
-  }, [processFile])
 
   const uploadFunction = dev ? mockHandleUpload : handleUpload;
 
@@ -169,7 +173,7 @@ function App() {
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
               <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-                {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
+              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
                 <span className=''>
                   {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
                 </span>

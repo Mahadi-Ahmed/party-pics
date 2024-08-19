@@ -15,7 +15,7 @@ function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
-  const [successfulUpload, setSuccessfullUpload] = useState(false)
+  const [successfulUpload, setSuccessfulUpload] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -44,10 +44,7 @@ function App() {
 
     console.log('Mocked upload completed')
     setUploading(false)
-    setSuccessfullUpload(true)
-    toast.success('Klart! Tack för att du delade bilderna med oss', {
-      id: 'uploadToast'
-    })
+    handleSuccessfulUpload()
   }
 
 
@@ -101,15 +98,25 @@ function App() {
       const uploadResult = await Promise.allSettled(uploadAll)
       console.log('All files uploaded successfully')
       console.log(uploadResult)
+      handleSuccessfulUpload()
     } catch (error) {
       console.log('kalabalik uploading')
       console.log(error)
-    } finally {
-      setUploading(false)
-      toast.success('Klart! Tack för att du delade bilderna med oss', {
+      toast.error('Ett fel uppstod vid uppladdningen. Försök igen.', {
         id: 'uploadToast'
       })
+    } finally {
+      setUploading(false)
     }
+  }
+
+  const handleSuccessfulUpload = () => {
+    setSuccessfulUpload(true)
+    setPreviewFiles([])
+    setRawUserFiles([])
+    toast.success('Klart! Tack för att du delade bilderna med oss', {
+      id: 'uploadToast'
+    })
   }
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -123,6 +130,7 @@ function App() {
         type: file.type
       }))
       setPreviewFiles(previewUrls)
+      setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
     }
   }
 

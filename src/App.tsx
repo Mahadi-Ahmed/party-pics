@@ -2,6 +2,7 @@ import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
+import { toast } from 'sonner'
 
 export interface PreviewFile {
   url: string;
@@ -32,6 +33,10 @@ function App() {
   const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('Mocked upload started')
+    toast.loading('Laddar up bilder...', {
+      id: 'uploadToast'
+    })
+
     setUploading(true)
 
     // Simulate API request with a 3-second delay
@@ -40,6 +45,9 @@ function App() {
     console.log('Mocked upload completed')
     setUploading(false)
     setSuccessfullUpload(true)
+    toast.success('Klart! Tack för att du delade bilderna med oss', {
+      id: 'uploadToast'
+    })
   }
 
 

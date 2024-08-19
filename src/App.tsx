@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState, useEffect, useCallback } from 'react'
+import { ChangeEvent, useRef, useState, useEffect, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -13,10 +13,17 @@ const dev = true
 
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
-  const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
   const [successfulUpload, setSuccessfulUpload] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const previewFiles = useMemo(() =>
+    rawUserFiles.map(file => ({
+      url: URL.createObjectURL(file),
+      type: file.type
+    })),
+    [rawUserFiles]
+  )
 
   useEffect(() => {
     return () => {
@@ -29,39 +36,15 @@ function App() {
     fileInputRef.current?.click()
   }
 
-  const processFile = useCallback((file: File): PreviewFile => {
-    return {
-      url: URL.createObjectURL(file),
-      type: file.type
-    }
-  }, [])
-
   const handleFileInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     console.log('handleFileInput')
     const files = event.target.files
     if (files) {
       const fileArray = Array.from(files)
       setRawUserFiles(prevFiles => [...prevFiles, ...fileArray])
-      
-      // Process files in batches to improve performance
-      const batchSize = 5
-      const processBatch = (start: number) => {
-        const end = Math.min(start + batchSize, fileArray.length)
-        const batch = fileArray.slice(start, end)
-        
-        const newPreviewUrls = batch.map(processFile)
-        
-        setPreviewFiles(prev => [...prev, ...newPreviewUrls])
-        
-        if (end < fileArray.length) {
-          setTimeout(() => processBatch(end), 0)
-        }
-      }
-      
-      processBatch(0)
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
     }
-  }, [processFile])
+  }, [])
 
   const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -142,7 +125,6 @@ function App() {
 
   const handleSuccessfulUpload = () => {
     setSuccessfulUpload(true)
-    setPreviewFiles([])
     setRawUserFiles([])
     toast.success('Klart! Tack för att du delade bilderna med oss', {
       id: 'uploadToast'
@@ -173,7 +155,7 @@ function App() {
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
               <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
+                {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
                 <span className=''>
                   {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
                 </span>

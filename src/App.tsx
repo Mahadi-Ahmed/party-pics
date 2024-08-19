@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState, useEffect } from 'react'
+import { ChangeEvent, useRef, useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -29,7 +29,6 @@ function App() {
     fileInputRef.current?.click()
   }
 
-
   const mockHandleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     console.log('Mocked upload started')
@@ -46,7 +45,6 @@ function App() {
     setUploading(false)
     handleSuccessfulUpload()
   }
-
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -119,20 +117,33 @@ function App() {
     })
   }
 
-  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log('handleFileInput ')
+  const processFile = useCallback((file: File): Promise<PreviewFile> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        resolve({
+          url: URL.createObjectURL(file),
+          type: file.type
+        })
+      }
+      reader.readAsDataURL(file)
+    })
+  }, [])
+
+  const handleFileInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    console.log('handleFileInput')
     const files = event.target.files
     if (files) {
       const fileArray = Array.from(files)
-      setRawUserFiles(fileArray)
-      const previewUrls = fileArray.map((file) => ({
-        url: URL.createObjectURL(file),
-        type: file.type
-      }))
-      setPreviewFiles(previewUrls)
+      setRawUserFiles(prevFiles => [...prevFiles, ...fileArray])
+
+      fileArray.forEach(async (file) => {
+        const previewFile = await processFile(file)
+        setPreviewFiles(prevPreviews => [...prevPreviews, previewFile])
+      })
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
     }
-  }
+  }, [processFile])
 
   const uploadFunction = dev ? mockHandleUpload : handleUpload;
 
@@ -158,7 +169,7 @@ function App() {
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
               <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
+                {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
                 <span className=''>
                   {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
                 </span>

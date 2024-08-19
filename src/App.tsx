@@ -9,7 +9,7 @@ export interface PreviewFile {
   type: string;
 }
 
-const dev = true
+const dev = false
 
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])

@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Preview } from './components/Preview';
+// import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
 
@@ -166,7 +166,8 @@ function App() {
             </div>
           </form>
         </div>
-        <Preview previewFiles={previewFiles} />
+        {/* <Preview previewFiles={previewFiles} /> */}
+        {rawUserFiles.map(file => <p key={file.name}>{file.name}</p>)}
       </div>
     </div>
   )

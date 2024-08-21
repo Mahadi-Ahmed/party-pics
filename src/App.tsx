@@ -16,11 +16,26 @@ function App() {
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
   const [successfulUpload, setSuccessfulUpload] = useState(false)
+  const [processing, setProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const workerRef = useRef<Worker | null>(null);
 
   const cleanupPreviewUrls = useCallback(() => {
     previewFiles.forEach((file: PreviewFile) => URL.revokeObjectURL(file.url))
   }, [previewFiles])
+
+  useEffect(() => {
+    workerRef.current = new Worker(new URL('./workers/fileProcessor.ts', import.meta.url), { type: 'module' });
+
+    workerRef.current.onmessage = (event: MessageEvent<PreviewFile[]>) => {
+      setPreviewFiles(event.data);
+      setProcessing(false);
+    };
+
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
 
   useEffect(() => {
     return cleanupPreviewUrls
@@ -126,13 +141,11 @@ function App() {
     const files = event.target.files
     if (files) {
       const fileArray = Array.from(files)
+      setProcessing(true)
       setRawUserFiles(fileArray)
-      const previewUrls = fileArray.map((file) => ({
-        url: URL.createObjectURL(file),
-        type: file.type
-      }))
-      setPreviewFiles(previewUrls)
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
+
+      workerRef.current?.postMessage(fileArray)
     }
   }
 

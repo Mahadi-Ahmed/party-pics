@@ -16,7 +16,7 @@ function App() {
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
   const [successfulUpload, setSuccessfulUpload] = useState(false)
-  const [processing, setProcessing] = useState(false)
+  // const [processing, setProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const workerRef = useRef<Worker | null>(null);
 
@@ -29,7 +29,7 @@ function App() {
 
     workerRef.current.onmessage = (event: MessageEvent<PreviewFile[]>) => {
       setPreviewFiles(event.data);
-      setProcessing(false);
+      // setProcessing(false);
     };
 
     return () => {
@@ -141,7 +141,7 @@ function App() {
     const files = event.target.files
     if (files) {
       const fileArray = Array.from(files)
-      setProcessing(true)
+      // setProcessing(true)
       setRawUserFiles(fileArray)
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
 

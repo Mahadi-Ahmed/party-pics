@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState, useEffect } from 'react'
+import { ChangeEvent, useRef, useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -18,11 +18,13 @@ function App() {
   const [successfulUpload, setSuccessfulUpload] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    return () => {
-      return previewFiles.forEach(file => URL.revokeObjectURL(file.url))
-    }
+  const cleanupPreviewUrls = useCallback(() => {
+    previewFiles.forEach((file: PreviewFile) => URL.revokeObjectURL(file.url))
   }, [previewFiles])
+
+  useEffect(() => {
+    return cleanupPreviewUrls
+  }, [cleanupPreviewUrls])
 
   const handleSelectPhoto = async () => {
     console.log('click select photo')
@@ -158,7 +160,7 @@ function App() {
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
               <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
+                {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
                 <span className=''>
                   {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
                 </span>

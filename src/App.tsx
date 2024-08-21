@@ -16,7 +16,7 @@ function App() {
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
   const [successfulUpload, setSuccessfulUpload] = useState(false)
-  // const [processing, setProcessing] = useState(false)
+  const [processing, setProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const workerRef = useRef<Worker | null>(null);
 
@@ -29,7 +29,7 @@ function App() {
 
     workerRef.current.onmessage = (event: MessageEvent<PreviewFile[]>) => {
       setPreviewFiles(event.data);
-      // setProcessing(false);
+      setProcessing(false);
     };
 
     return () => {
@@ -141,11 +141,22 @@ function App() {
     const files = event.target.files
     if (files) {
       const fileArray = Array.from(files)
-      // setProcessing(true)
-      setRawUserFiles(fileArray)
+
+      // NOTE: close file selector ASAP
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
 
-      workerRef.current?.postMessage(fileArray)
+      toast.success(`${fileArray.length} filer valda`, { duration: 2000 })
+
+      setProcessing(true)
+      setTimeout(() => {
+        workerRef.current?.postMessage(fileArray)
+      }, 0)
+
+      setRawUserFiles(fileArray)
     }
   }
 
@@ -181,6 +192,7 @@ function App() {
             </div>
           </form>
         </div>
+        {processing && <p>Processing your photos...</p>}
         <Preview previewFiles={previewFiles} />
       </div>
     </div>

@@ -139,9 +139,11 @@ function App() {
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
     console.log('handleFileInput ')
     const files = event.target.files
+    console.log(files?.length)
     if (files) {
-      const fileArray = Array.from(files)
-
+      // const fileArray = Array.from(files)
+      workerRef.current?.postMessage(files)
+      
       // NOTE: close file selector ASAP
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
@@ -149,14 +151,14 @@ function App() {
 
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
 
-      toast.success(`${fileArray.length} filer valda`, { duration: 2000 })
+      toast.success(`${files?.length} filer valda`, { duration: 2000 })
 
       setProcessing(true)
-      setTimeout(() => {
-        workerRef.current?.postMessage(fileArray)
-      }, 0)
+      // setTimeout(() => {
+      //   workerRef.current?.postMessage(files)
+      // }, 0)
 
-      setRawUserFiles(fileArray)
+      // setRawUserFiles(fileArray)
     }
   }
 

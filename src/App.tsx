@@ -143,6 +143,7 @@ function App() {
     if (files) {
       // const fileArray = Array.from(files)
       workerRef.current?.postMessage(files)
+      toast.success(`${files?.length} filer valda`, { duration: 2000 })
       
       // NOTE: close file selector ASAP
       if (fileInputRef.current) {
@@ -151,7 +152,6 @@ function App() {
 
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
 
-      toast.success(`${files?.length} filer valda`, { duration: 2000 })
 
       setProcessing(true)
       // setTimeout(() => {
@@ -195,7 +195,8 @@ function App() {
           </form>
         </div>
         {processing && <p>Processing your photos...</p>}
-        <Preview previewFiles={previewFiles} />
+        {previewFiles.map(file => <p key={file.url}>{file.url}</p>)}
+        {/* <Preview previewFiles={previewFiles} /> */}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
-import { Preview } from './components/Preview';
+// import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
 
@@ -143,7 +143,10 @@ function App() {
     if (files) {
       // const fileArray = Array.from(files)
       workerRef.current?.postMessage(files)
-      toast.success(`${files?.length} filer valda`, { duration: 2000 })
+
+
+
+      // toast.success(`${files?.length} filer valda`, { duration: 2000 })
       
       // NOTE: close file selector ASAP
       if (fileInputRef.current) {

@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState, useEffect } from 'react'
+import { ChangeEvent, useRef, useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Preview } from './components/Preview';
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -16,13 +16,30 @@ function App() {
   const [previewFiles, setPreviewFiles] = useState<PreviewFile[]>([])
   const [uploading, setUploading] = useState(false)
   const [successfulUpload, setSuccessfulUpload] = useState(false)
+  const [processing, setProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const workerRef = useRef<Worker | null>(null);
+
+  const cleanupPreviewUrls = useCallback(() => {
+    previewFiles.forEach((file: PreviewFile) => URL.revokeObjectURL(file.url))
+  }, [previewFiles])
 
   useEffect(() => {
+    workerRef.current = new Worker(new URL('./workers/fileProcessor.ts', import.meta.url), { type: 'module' });
+
+    workerRef.current.onmessage = (event: MessageEvent<PreviewFile[]>) => {
+      setPreviewFiles(event.data);
+      setProcessing(false);
+    };
+
     return () => {
-      return previewFiles.forEach(file => URL.revokeObjectURL(file.url))
-    }
-  }, [previewFiles])
+      workerRef.current?.terminate();
+    };
+  }, []);
+
+  useEffect(() => {
+    return cleanupPreviewUrls
+  }, [cleanupPreviewUrls])
 
   const handleSelectPhoto = async () => {
     console.log('click select photo')
@@ -122,15 +139,22 @@ function App() {
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
     console.log('handleFileInput ')
     const files = event.target.files
+    console.log(files?.length)
     if (files) {
       const fileArray = Array.from(files)
-      setRawUserFiles(fileArray)
-      const previewUrls = fileArray.map((file) => ({
-        url: URL.createObjectURL(file),
-        type: file.type
-      }))
-      setPreviewFiles(previewUrls)
+      workerRef.current?.postMessage(files)
+
+      toast.success(`${files?.length} filer valda`, { duration: 2000 })
+      
+      // NOTE: close file selector ASAP
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
+
+      setProcessing(true)
+      setRawUserFiles(fileArray)
     }
   }
 
@@ -158,7 +182,7 @@ function App() {
             <div className='flex gap-2'>
               <Button type='button' onClick={handleSelectPhoto}>Select Photos</Button>
               <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0 || successfulUpload}>
-              {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
+                {/* <Button type='submit' className='relative w-24' variant='secondary' disabled={uploading || rawUserFiles.length === 0}> */}
                 <span className=''>
                   {uploading ? <ReloadIcon className='h-4 w-4 animate-spin' /> : 'Upload'}
                 </span>
@@ -166,6 +190,7 @@ function App() {
             </div>
           </form>
         </div>
+        {processing && <p>Processing your photos...</p>}
         <Preview previewFiles={previewFiles} />
       </div>
     </div>

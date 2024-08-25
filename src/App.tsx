@@ -156,7 +156,7 @@ function App() {
     setPreviewFiles([])
 
     // Batch size for processing files
-    const BATCH_SIZE = 5
+    const BATCH_SIZE = 3
     const totalFiles = fileArray.length
 
     toast.success(`${totalFiles} filer valda`, { duration: 2000 })

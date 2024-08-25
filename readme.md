@@ -24,8 +24,9 @@ TODO:
 - [x] add toast when upload is successfull/failed
 - [x] find a limit of pictures this soloution can handle
 - [x] make sure original format is preserved when uploading
-- [] look into why adding multiple pictures takes alot of time on the pic seleciton on mobile devices
-- [] look over color scheme
+- [x] look into why adding multiple pictures takes alot of time on the pic seleciton on mobile devices
+  - [] Seems to be a ios thing
+- [x] look over color scheme
 
 
 ## React + TypeScript + Vite

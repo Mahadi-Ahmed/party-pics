@@ -20,6 +20,9 @@ function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const workerRef = useRef<Worker | null>(null);
 
+  const [processedBatches, setProcessedBatches] = useState<number>(0)
+  const [totalBatches, setTotalBatches] = useState<number>(0)
+
   const cleanupPreviewUrls = useCallback(() => {
     previewFiles.forEach((file: PreviewFile) => URL.revokeObjectURL(file.url))
   }, [previewFiles])
@@ -28,14 +31,20 @@ function App() {
     workerRef.current = new Worker(new URL('./workers/fileProcessor.ts', import.meta.url), { type: 'module' });
 
     workerRef.current.onmessage = (event: MessageEvent<PreviewFile[]>) => {
-      setPreviewFiles(event.data);
-      setProcessing(false);
+      setPreviewFiles(prevFiles => [...prevFiles, ...event.data]);
+      setProcessedBatches(prev => prev + 1);
     };
 
     return () => {
       workerRef.current?.terminate();
     };
   }, []);
+
+  useEffect(() => {
+    if (processedBatches > 0 && processedBatches === totalBatches) {
+      setProcessing(false);
+    }
+  }, [processedBatches, totalBatches]);
 
   useEffect(() => {
     return cleanupPreviewUrls
@@ -137,24 +146,47 @@ function App() {
   }
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log('handleFileInput ')
+    console.log('handleFileInput')
     const files = event.target.files
-    console.log(files?.length)
-    if (files) {
-      const fileArray = Array.from(files)
-      workerRef.current?.postMessage(files)
+    if (!files) return
 
-      toast.success(`${files?.length} filer valda`, { duration: 2000 })
-      
-      // NOTE: close file selector ASAP
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+    const fileArray = Array.from(files)
+    setSuccessfulUpload(false)
+    setProcessing(true)
+    setPreviewFiles([])
+
+    // Batch size for processing files
+    const BATCH_SIZE = 5
+    const totalFiles = fileArray.length
+
+    toast.success(`${totalFiles} filer valda`, { duration: 2000 })
+
+    const batchCount = Math.ceil(totalFiles / BATCH_SIZE)
+    setTotalBatches(batchCount)
+    setProcessedBatches(0)
+
+    // Process files in batches
+    const processBatch = (startIndex: number) => {
+      const endIndex = Math.min(startIndex + BATCH_SIZE, totalFiles)
+      const batch = fileArray.slice(startIndex, endIndex)
+
+      workerRef.current?.postMessage(batch)
+
+      if (endIndex < totalFiles) {
+        // Schedule next batch
+        setTimeout(() => processBatch(endIndex), 0)
       }
+    }
 
-      setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
+    // Start processing the first batch
+    processBatch(0)
 
-      setProcessing(true)
-      setRawUserFiles(fileArray)
+    // Set raw user files
+    setRawUserFiles(fileArray)
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
   }
 

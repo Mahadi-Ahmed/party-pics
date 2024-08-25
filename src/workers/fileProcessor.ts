@@ -3,9 +3,10 @@ interface ProcessedFile {
   type: string;
 }
 
-self.onmessage = (event: MessageEvent<File[]>) => {
+self.onmessage = (event: MessageEvent<FileList>) => {
   console.log('Worker Called')
-  const files = event.data;
+  const eventData = event.data;
+  const files = Array.from(eventData)
   const processedFiles: ProcessedFile[] = files.map((file: File) => ({
     url: URL.createObjectURL(file),
     type: file.type

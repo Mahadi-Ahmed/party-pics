@@ -145,11 +145,6 @@ function App() {
       workerRef.current?.postMessage(files)
 
       toast.success(`${files?.length} filer valda`, { duration: 2000 })
-      
-      // NOTE: close file selector ASAP
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
 
       setSuccessfulUpload(false)  // Reset successful upload state when new files are selected
 

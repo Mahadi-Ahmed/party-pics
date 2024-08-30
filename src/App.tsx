@@ -9,7 +9,7 @@ export interface PreviewFile {
   type: string;
 }
 
-const dev = true
+const dev = false
 
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
@@ -79,7 +79,6 @@ function App() {
      * 2. Upload each picture using the signed url
      * */
     const gcpUrl = 'https://europe-north1-mahadi-tabu-wedding-pic-app.cloudfunctions.net/generate-signed-urls'
-    // const gcpUrl = 'http://localhost:8080'
     const filesInfo = rawUserFiles.map(file => ({ name: file.name, type: file.type }))
     console.log(filesInfo)
     try {

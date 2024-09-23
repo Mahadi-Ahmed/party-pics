@@ -9,7 +9,7 @@ export interface PreviewFile {
   type: string;
 }
 
-const dev = false
+const dev = true
 
 function App() {
   const [rawUserFiles, setRawUserFiles] = useState<File[]>([])
@@ -130,7 +130,7 @@ function App() {
     setSuccessfulUpload(true)
     setPreviewFiles([])
     setRawUserFiles([])
-    toast.success('Klart! Tack för att du delade bilderna med oss', {
+    toast.success('Eventet är över, Inget laddas upp längre', {
       id: 'uploadToast'
     })
   }
